@@ -72,9 +72,11 @@ def multiple_iterator(iterable):
 
 if __name__ == '__main__':
     print(time.ctime())
+
+    gamma=1
     
     NsList = np.array([60,100,140,180,220])
-    NrList = np.array(NsList*1.75).astype(int)
+    NrList = np.array(NsList*gamma).astype(int)
 
 
     for nID in range(len(NsList)):
@@ -113,7 +115,7 @@ if __name__ == '__main__':
 
         print(f"Total time: {time.time()-TSTARTTOTAL}\n")
 
-        saveFolder = "data/predictability/"
+        saveFolder = f"../data/simulation_data/predictability/gamma{gamma}/"
         os.makedirs(saveFolder, exist_ok=True)
         utils.save_compressed_pickle(saveFolder+"glv_predictability_data_N-"+str(Ns),functionResults)
         utils.save_compressed_pickle(saveFolder+"glv_predictability_params_N-"+str(Ns),species_params)

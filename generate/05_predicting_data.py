@@ -108,11 +108,11 @@ def generate_needed_matrices(rescaled_inter_matrix,needed_Ns):
 ### DUCKWEED DATA ###
 #####################
 
-full_pops = pd.read_csv("../data/endpoints-master/data/Ishizawa_duckweed/full_comm_pops.csv").to_numpy()
+full_pops = pd.read_csv("../data/interaction_data/ishizawa_et_al/full_comm_pops.csv").to_numpy()
 pops = np.mean(full_pops,axis=0)
-drop_one_pops = pd.read_csv("../data/endpoints-master/data/Ishizawa_duckweed/drop_one_pops.csv").to_numpy()
+drop_one_pops = pd.read_csv("../data/interaction_data/ishizawa_et_al/drop_one_pops.csv").to_numpy()
 
-inters_chain = pd.read_csv("../data/endpoints-master/data/Ishizawa_duckweed/chains_upto_four.csv").to_numpy()[:,1:]
+inters_chain = pd.read_csv("../data/interaction_data/ishizawa_et_al/chains_upto_four.csv").to_numpy()[:,1:]
 mean_inters = np.mean(inters_chain,axis=0)
 sd_inters = np.std(inters_chain,axis=0)
 cov_sd = np.diag(sd_inters**2)
@@ -217,7 +217,7 @@ print(stats.mannwhitneyu(difference_lognormal_duckweed,difference_gaussian_duckw
 ### IN VITRO GUT DATA ###
 #########################
 
-data_folder = "../data/Ho et al 2024/"
+data_folder = "../data/interaction_data/ho_et_al/"
 full_comm_expt = pd.read_csv(data_folder+"15sp.csv").to_numpy()
 full_comm_expt = full_comm_expt[0]
 drop_one_out_expt = pd.read_csv(data_folder+"14sp.csv").to_numpy()
@@ -300,8 +300,8 @@ for trialID in range(n_trials):
 gaussian_diversities = gaussian_diversities[gaussian_diversities > 0]
 lognormal_diversities = lognormal_diversities[lognormal_diversities > 0]
 
-np.save("../data/figures/fig4/gut/gaussian_diversities.npy",gaussian_diversities)
-np.save("../data/figures/fig4/gut/lognormal_diversities.npy",lognormal_diversities)
+# np.save("../data/figures/fig4/gut/gaussian_diversities.npy",gaussian_diversities)
+# np.save("../data/figures/fig4/gut/lognormal_diversities.npy",lognormal_diversities)
 
 pop_diversities = np.zeros(drop_one_out_expt.shape[0])
 for i in range(drop_one_out_expt.shape[0]):

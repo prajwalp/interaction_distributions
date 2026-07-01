@@ -29,10 +29,8 @@ if __name__ == '__main__':
     dateStr = time.strftime("%d_%m_%Y_")
     saveTimeStamp = str(int(time.time()))
 
-    # saveFolder = "../../../Data/microbial_interactions/theory/simplified/parameters/"
-    saveFolder = "data/"    
-    os.makedirs(saveFolder+dateStr+saveTimeStamp+"/", exist_ok=True)
-    dataSaveFolder = saveFolder+dateStr+saveTimeStamp+"/"
+    saveFolder = "../data/simulation_data/random_communities/"    
+    dataSaveFolder = saveFolder+saveTimeStamp+"/"
    
     run_times = 2
     for runId in range(run_times):
@@ -55,7 +53,7 @@ if __name__ == '__main__':
         delta = 0.2
         numRuns = 10
         maxTime = 10000
-        comments = "random communities (extra)"
+        comments = "random communities"
 
         TSTARTTOTAL = time.time()
 
