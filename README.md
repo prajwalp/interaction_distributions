@@ -22,7 +22,8 @@ This repository reproduces the analyses and figures used/shown in the paper. The
 │   ├── 02_informed_glv.py        # Informed-gLV predictions     → data/simulation_data/predictability/
 │   ├── 03_analytical_skew.py     # Analytical + simulated skew  → data/figures/fig2/
 │   ├── 04_example_matrices.py    # Example interaction matrices → data/figures/fig2/
-│   └── 05_predicting_data.py     # Diversity predictions        → data/figures/fig4/
+│   ├── 05_predicting_data.py     # Diversity predictions        → data/figures/fig4/
+|   └── skew_calculations.nb      # Mathematica notebook that analytically computes skew for competitive and crossfeeding cases
 │
 ├── figures/                      # Plotting notebooks and rendered output (run from inside this directory)
 │   ├── figures.ipynb             # Figures 1, 3, 4
