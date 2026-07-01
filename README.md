@@ -1,11 +1,12 @@
 Code and data accompanying:
 
-> **Metabolic processes shape microbial interaction distributions**
-> Prajwal Padmanabha, Sara Mitri
+**Metabolic processes shape microbial interaction distributions**
+
+Prajwal Padmanabha, Sara Mitri
 
 ## Overview
 
-This repository reproduces the analyses and figures in the paper. The workflow has three stages — **generate** raw simulations, **process** theminto summary arrays, and **plot** the figures. All processed data is included, so the figures can be reproduced without re-running the compute-heavy simulations.
+This repository reproduces the analyses and figures used/shown in the paper. The workflow has three stages — **generate** raw simulations, **process** them into summary arrays, and **plot** the figures. All processed data is included, so the figures can be reproduced without re-running the compute-heavy simulations.
 
 ## Repository structure
 
@@ -76,7 +77,7 @@ python 05_predicting_data.py
 
 ### 2. Process
 
-Two aggregation steps turn the raw `.pbz2` dumps into the summary arrays the figures consume. Each lives in a commented "run once" cell near the top of a notebook, and its output is already included:
+Aggregation steps turn the raw `.pbz2` files into the summary arrays the that can be used to plot the figures. Each lives in a commented "run once" cell near the top of a notebook, and its output is already included:
 
 - **`data_analysis.ipynb`** — aggregates `simulation_data/random_communities/` to `data/figures/fig1/interaction_measures.npy` (per-community skewness and  kurtosis, plus the normality test used for Figure 2B).
 - **`figures.ipynb`** — aggregates `simulation_data/predictability/` to `data/figures/fig3/predictability_data_highSupply.npz`.
@@ -98,7 +99,7 @@ Rendered panels are written to `figures/generated/` — the `savefig` calls are 
 
 - **`cr_model.py`** — the consumer–resource model (Monod uptake with linear cross-feeding), the Environment–Organism (EO) conversion from a CR steady state to effective gLV growth rates and interactions, the canonical rescaling `a_ij = b_ij * r_j / (b_jj * r_i)`, and the gLV integrator.
 - **`informed_glv.py`** — fits lognormal / Gaussian / correlated interaction distributions to a matrix and samples new matrices from them, plus the routine that integrates an informed gLV community and measures its diversity.
-- **`utils.py`** — compressed-pickle I/O, the normal↔lognormal parameter conversion, Shannon diversity, and small helpers.
+- **`utils.py`** — compressed-pickle I/O, the normal to lognormal parameter conversion, Shannon diversity, and small helpers.
 
 ## Datasets
 
