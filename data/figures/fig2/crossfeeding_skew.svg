@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="536.4pt" height="392.4pt" viewBox="0 0 536.4 392.4" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2026-03-27T07:28:51.716025</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.8.1, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 392.4 
+L 536.4 392.4 
+L 536.4 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="axes_1">
+   <g id="patch_2">
+    <path d="M 59.395313 350.7 
+L 502.471875 350.7 
+L 502.471875 17.7 
+L 59.395313 17.7 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="PathCollection_1">
+    <defs>
+     <path id="m605f977ebe" d="M 0 7.071068 
+C 1.875269 7.071068 3.673985 6.326016 5 5 
+C 6.326016 3.673985 7.071068 1.875269 7.071068 0 
+C 7.071068 -1.875269 6.326016 -3.673985 5 -5 
+C 3.673985 -6.326016 1.875269 -7.071068 0 -7.071068 
+C -1.875269 -7.071068 -3.673985 -6.326016 -5 -5 
+C -6.326016 -3.673985 -7.071068 -1.875269 -7.071068 0 
+C -7.071068 1.875269 -6.326016 3.673985 -5 5 
+C -3.673985 6.326016 -1.875269 7.071068 0 7.071068 
+z
+" style="stroke: #ffffff; stroke-width: 2"/>
+    </defs>
+    <g clip-path="url(#p1ec822980d)">
+     <use xlink:href="#m605f977ebe" x="93.478125" y="304.657421" style="fill: #777777; stroke: #ffffff; stroke-width: 2"/>
+     <use xlink:href="#m605f977ebe" x="434.30625" y="73.163781" style="fill: #777777; stroke: #ffffff; stroke-width: 2"/>
+    </g>
+   </g>
+   <g id="matplotlib.axis_1">
+    <g id="xtick_1">
+     <g id="line2d_1">
+      <defs>
+       <path id="ma18f1c4d4b" d="M 0 0 
+L 0 4 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#ma18f1c4d4b" x="59.395313" y="350.7" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_1">
+      <!-- 0.0 -->
+      <g transform="translate(37.047656 379.2) scale(0.3 -0.3)">
+       <defs>
+        <path id="Figtree-Regular-30" d="M 2048 -77 
+Q 1536 -77 1139 220 
+Q 742 518 518 1040 
+Q 294 1562 294 2240 
+Q 294 2918 518 3440 
+Q 742 3962 1136 4259 
+Q 1530 4557 2048 4557 
+Q 2566 4557 2960 4259 
+Q 3354 3962 3581 3440 
+Q 3808 2918 3808 2240 
+Q 3808 1562 3584 1040 
+Q 3360 518 2963 220 
+Q 2566 -77 2048 -77 
+z
+M 2048 410 
+Q 2406 410 2684 646 
+Q 2963 883 3120 1292 
+Q 3277 1702 3277 2240 
+Q 3277 2778 3120 3190 
+Q 2963 3603 2684 3836 
+Q 2406 4070 2048 4070 
+Q 1690 4070 1414 3836 
+Q 1139 3603 982 3190 
+Q 826 2778 826 2240 
+Q 826 1702 982 1292 
+Q 1139 883 1417 646 
+Q 1696 410 2048 410 
+z
+" transform="scale(0.015625)"/>
+        <path id="Figtree-Regular-2e" d="M 666 -90 
+Q 518 -90 412 16 
+Q 307 122 307 262 
+Q 307 410 412 515 
+Q 518 621 666 621 
+Q 813 621 915 515 
+Q 1018 410 1018 262 
+Q 1018 122 915 16 
+Q 813 -90 666 -90 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#Figtree-Regular-30"/>
+       <use xlink:href="#Figtree-Regular-2e" x="64.099991"/>
+       <use xlink:href="#Figtree-Regular-30" x="84.899979"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_2">
+     <g id="line2d_2">
+      <g>
+       <use xlink:href="#ma18f1c4d4b" x="195.726563" y="350.7" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_2">
+      <!-- 0.1 -->
+      <g transform="translate(176.798438 379.2) scale(0.3 -0.3)">
+       <defs>
+        <path id="Figtree-Regular-31" d="M 1389 0 
+L 1389 4192 
+L 1434 4480 
+L 1920 4480 
+L 1920 0 
+L 1389 0 
+z
+M 384 3328 
+L 384 3821 
+Q 518 3814 704 3910 
+Q 890 4006 1088 4160 
+Q 1286 4314 1434 4480 
+L 1766 4115 
+Q 1555 3891 1324 3712 
+Q 1094 3533 857 3427 
+Q 621 3322 384 3328 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#Figtree-Regular-30"/>
+       <use xlink:href="#Figtree-Regular-2e" x="64.099991"/>
+       <use xlink:href="#Figtree-Regular-31" x="84.899979"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_3">
+     <g id="line2d_3">
+      <g>
+       <use xlink:href="#ma18f1c4d4b" x="332.057813" y="350.7" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_3">
+      <!-- 0.2 -->
+      <g transform="translate(310.938281 379.2) scale(0.3 -0.3)">
+       <defs>
+        <path id="Figtree-Regular-32" d="M 365 0 
+L 365 448 
+Q 365 659 451 867 
+Q 538 1075 701 1280 
+Q 864 1485 1101 1664 
+L 2029 2362 
+Q 2195 2477 2320 2627 
+Q 2445 2778 2515 2941 
+Q 2586 3104 2586 3258 
+Q 2586 3482 2477 3664 
+Q 2368 3846 2169 3955 
+Q 1971 4064 1702 4064 
+Q 1440 4064 1241 3965 
+Q 1043 3866 915 3702 
+Q 787 3539 730 3354 
+L 179 3462 
+Q 256 3750 457 4000 
+Q 659 4250 972 4403 
+Q 1286 4557 1670 4557 
+Q 2118 4557 2444 4387 
+Q 2771 4218 2953 3926 
+Q 3136 3635 3136 3264 
+Q 3136 2912 2944 2598 
+Q 2752 2285 2387 1990 
+L 1510 1325 
+Q 1254 1133 1116 921 
+Q 979 710 960 480 
+L 3200 480 
+L 3200 0 
+L 365 0 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#Figtree-Regular-30"/>
+       <use xlink:href="#Figtree-Regular-2e" x="64.099991"/>
+       <use xlink:href="#Figtree-Regular-32" x="84.899979"/>
+      </g>
+     </g>
+    </g>
+    <g id="xtick_4">
+     <g id="line2d_4">
+      <g>
+       <use xlink:href="#ma18f1c4d4b" x="468.389063" y="350.7" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_4">
+      <!-- 0.3 -->
+      <g transform="translate(447.494531 379.2) scale(0.3 -0.3)">
+       <defs>
+        <path id="Figtree-Regular-33" d="M 1722 -77 
+Q 1395 -77 1129 22 
+Q 864 122 675 282 
+Q 486 442 378 621 
+L 826 870 
+Q 896 781 1001 669 
+Q 1107 557 1273 480 
+Q 1440 403 1683 403 
+Q 2118 403 2380 652 
+Q 2643 902 2643 1280 
+Q 2643 1568 2486 1766 
+Q 2330 1965 2035 2067 
+Q 1741 2170 1331 2170 
+L 1210 2170 
+L 1210 2592 
+L 1318 2592 
+Q 1722 2592 2061 2502 
+Q 2400 2413 2653 2240 
+Q 2906 2067 3043 1817 
+Q 3181 1568 3181 1242 
+Q 3181 845 2985 547 
+Q 2790 250 2457 86 
+Q 2125 -77 1722 -77 
+z
+M 1210 2214 
+L 1210 2630 
+L 1331 2630 
+Q 1882 2630 2205 2819 
+Q 2528 3008 2528 3360 
+Q 2528 3552 2425 3715 
+Q 2323 3878 2128 3977 
+Q 1933 4077 1677 4077 
+Q 1504 4077 1353 4029 
+Q 1203 3981 1078 3888 
+Q 954 3795 851 3654 
+L 429 3898 
+Q 550 4096 739 4243 
+Q 928 4390 1171 4473 
+Q 1414 4557 1702 4557 
+Q 2093 4557 2403 4403 
+Q 2714 4250 2893 3984 
+Q 3072 3718 3072 3386 
+Q 3072 3104 2937 2886 
+Q 2803 2669 2563 2515 
+Q 2323 2362 2006 2288 
+Q 1690 2214 1318 2214 
+L 1210 2214 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#Figtree-Regular-30"/>
+       <use xlink:href="#Figtree-Regular-2e" x="64.099991"/>
+       <use xlink:href="#Figtree-Regular-33" x="84.899979"/>
+      </g>
+     </g>
+    </g>
+   </g>
+   <g id="matplotlib.axis_2">
+    <g id="ytick_1">
+     <g id="line2d_5">
+      <defs>
+       <path id="mee6636c65c" d="M 0 0 
+L -4 0 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#mee6636c65c" x="59.395313" y="333.594126" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_5">
+      <!-- 0.0 -->
+      <g style="fill: #777777" transform="translate(7.2 344.094126) scale(0.3 -0.3)">
+       <use xlink:href="#Figtree-Regular-30"/>
+       <use xlink:href="#Figtree-Regular-2e" x="64.099991"/>
+       <use xlink:href="#Figtree-Regular-30" x="84.899979"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_2">
+     <g id="line2d_6">
+      <g>
+       <use xlink:href="#mee6636c65c" x="59.395313" y="44.227076" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_6">
+      <!-- 0.1 -->
+      <g style="fill: #777777" transform="translate(14.039063 54.727076) scale(0.3 -0.3)">
+       <use xlink:href="#Figtree-Regular-30"/>
+       <use xlink:href="#Figtree-Regular-2e" x="64.099991"/>
+       <use xlink:href="#Figtree-Regular-31" x="84.899979"/>
+      </g>
+     </g>
+    </g>
+   </g>
+   <g id="line2d_7">
+    <path d="M 73.028438 333.594126 
+L 118.01775 335.563636 
+L 164.370375 309.668204 
+L 209.359688 289.188588 
+L 254.349 253.155572 
+L 300.701625 213.595017 
+L 345.690938 175.806418 
+L 390.68025 136.055239 
+L 437.032875 85.482474 
+L 482.022188 32.836364 
+" clip-path="url(#p1ec822980d)" style="fill: none; stroke: #777777; stroke-width: 6; stroke-linecap: square"/>
+    <defs>
+     <path id="me373ed5c4b" d="M 0 4 
+C 1.060812 4 2.078319 3.578535 2.828427 2.828427 
+C 3.578535 2.078319 4 1.060812 4 0 
+C 4 -1.060812 3.578535 -2.078319 2.828427 -2.828427 
+C 2.078319 -3.578535 1.060812 -4 0 -4 
+C -1.060812 -4 -2.078319 -3.578535 -2.828427 -2.828427 
+C -3.578535 -2.078319 -4 -1.060812 -4 0 
+C -4 1.060812 -3.578535 2.078319 -2.828427 2.828427 
+C -2.078319 3.578535 -1.060812 4 0 4 
+z
+" style="stroke: #777777"/>
+    </defs>
+    <g clip-path="url(#p1ec822980d)">
+     <use xlink:href="#me373ed5c4b" x="73.028438" y="333.594126" style="fill: #777777; stroke: #777777"/>
+     <use xlink:href="#me373ed5c4b" x="118.01775" y="335.563636" style="fill: #777777; stroke: #777777"/>
+     <use xlink:href="#me373ed5c4b" x="164.370375" y="309.668204" style="fill: #777777; stroke: #777777"/>
+     <use xlink:href="#me373ed5c4b" x="209.359688" y="289.188588" style="fill: #777777; stroke: #777777"/>
+     <use xlink:href="#me373ed5c4b" x="254.349" y="253.155572" style="fill: #777777; stroke: #777777"/>
+     <use xlink:href="#me373ed5c4b" x="300.701625" y="213.595017" style="fill: #777777; stroke: #777777"/>
+     <use xlink:href="#me373ed5c4b" x="345.690938" y="175.806418" style="fill: #777777; stroke: #777777"/>
+     <use xlink:href="#me373ed5c4b" x="390.68025" y="136.055239" style="fill: #777777; stroke: #777777"/>
+     <use xlink:href="#me373ed5c4b" x="437.032875" y="85.482474" style="fill: #777777; stroke: #777777"/>
+     <use xlink:href="#me373ed5c4b" x="482.022188" y="32.836364" style="fill: #777777; stroke: #777777"/>
+    </g>
+   </g>
+   <g id="patch_3">
+    <path d="M 59.395313 350.7 
+L 59.395313 17.7 
+" style="fill: none; stroke: #000000; stroke-width: 1.5; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_4">
+    <path d="M 502.471875 350.7 
+L 502.471875 17.7 
+" style="fill: none; stroke: #000000; stroke-width: 1.5; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_5">
+    <path d="M 59.395313 350.7 
+L 502.471875 350.7 
+" style="fill: none; stroke: #000000; stroke-width: 1.5; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+  </g>
+  <g id="axes_2">
+   <g id="matplotlib.axis_3">
+    <g id="ytick_3">
+     <g id="line2d_8">
+      <defs>
+       <path id="m3c190dc520" d="M 0 0 
+L 4 0 
+" style="stroke: #000000; stroke-width: 0.8"/>
+      </defs>
+      <g>
+       <use xlink:href="#m3c190dc520" x="502.471875" y="337.511035" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_7">
+      <!-- 0 -->
+      <g style="fill: #711c62" transform="translate(509.971875 348.011035) scale(0.3 -0.3)">
+       <use xlink:href="#Figtree-Regular-30"/>
+      </g>
+     </g>
+    </g>
+    <g id="ytick_4">
+     <g id="line2d_9">
+      <g>
+       <use xlink:href="#m3c190dc520" x="502.471875" y="17.7" style="stroke: #000000; stroke-width: 0.8"/>
+      </g>
+     </g>
+     <g id="text_8">
+      <!-- 4 -->
+      <g style="fill: #711c62" transform="translate(509.971875 28.2) scale(0.3 -0.3)">
+       <defs>
+        <path id="Figtree-Regular-34" d="M 2342 0 
+L 2342 1088 
+L 275 1088 
+L 275 1504 
+L 2317 4480 
+L 2867 4480 
+L 2867 1568 
+L 3782 1568 
+L 3782 1088 
+L 2867 1088 
+L 2867 0 
+L 2342 0 
+z
+M 896 1568 
+L 2342 1568 
+L 2342 3693 
+L 896 1568 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#Figtree-Regular-34"/>
+      </g>
+     </g>
+    </g>
+   </g>
+   <g id="line2d_10">
+    <path d="M 59.395313 337.511035 
+L 79.845 334.361761 
+L 100.294688 330.935935 
+L 120.744375 327.196734 
+L 141.194063 323.100672 
+L 161.64375 318.59606 
+L 182.093438 313.621013 
+L 202.543125 308.100864 
+L 222.992813 301.944753 
+L 243.4425 295.041092 
+L 263.892188 287.251436 
+L 284.341875 278.402075 
+L 304.791563 268.272335 
+L 325.24125 256.577964 
+L 345.690938 242.947073 
+L 366.140625 226.884488 
+L 386.590313 207.717545 
+L 407.04 184.51117 
+L 427.489688 155.930224 
+L 447.939375 120.007267 
+L 468.389063 73.73174 
+" clip-path="url(#p1ec822980d)" style="fill: none; stroke: #711c62; stroke-width: 6; stroke-linecap: square"/>
+   </g>
+   <g id="patch_6">
+    <path d="M 59.395313 350.7 
+L 59.395313 17.7 
+" style="fill: none; stroke: #000000; stroke-width: 1.5; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+   <g id="patch_7">
+    <path d="M 59.395313 350.7 
+L 502.471875 350.7 
+" style="fill: none; stroke: #000000; stroke-width: 1.5; stroke-linejoin: miter; stroke-linecap: square"/>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="p1ec822980d">
+   <rect x="59.395313" y="17.7" width="443.076563" height="333"/>
+  </clipPath>
+ </defs>
+</svg>
