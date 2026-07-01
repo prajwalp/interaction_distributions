@@ -1,12 +1,9 @@
 import numpy as np
 from multiprocessing import Pool, cpu_count
 import time
-import os
-
 import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "scripts"))
 import cr_model
-import informed_glv
 import utils
 
 
@@ -34,7 +31,7 @@ if __name__ == '__main__':
 
     # saveFolder = "../../../Data/microbial_interactions/theory/simplified/parameters/"
     saveFolder = "data/"    
-    os.mkdir(saveFolder+dateStr+saveTimeStamp+"/")
+    os.makedirs(saveFolder+dateStr+saveTimeStamp+"/", exist_ok=True)
     dataSaveFolder = saveFolder+dateStr+saveTimeStamp+"/"
    
     run_times = 2

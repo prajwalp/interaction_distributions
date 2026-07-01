@@ -85,6 +85,10 @@ def with_affinities(rVec,muMatrix,dTensor,lVector,supplyVec,delta,Ns,Nr):
 
     return eo_interaction_params(rVec,muMatrix,dTensor,lVector,supplyVec,delta,Ns,Nr)
 
+def rescale_interactions(interactionMatrix,growthVec):
+    bjj = np.diag(interactionMatrix)
+    return (interactionMatrix*growthVec[None,:])/(bjj[None,:]*growthVec[:,None])
+
 ################
 ### DYNAMICS ###
 ################
@@ -108,9 +112,34 @@ def make_lsoda_func_dtx_dynamics_with_aff(muMatrix,dTensor,lVector,supplyVec,del
         dx_[:Ns][populations < 1e-20] = 0
     return dtx_dynamics_lsoda
 
+@njit
+def glv_fn(t,y,g,alpha):
+    ydot= y*(g - np.dot(alpha,y))
+    ydot[y <= 1e-14] = 0
+    ydot[y>=1e12] = 0
+    return ydot
+
+def make_lsoda_func_glv_dynamics(alpha,Ns):
+    @cfunc(lsoda_sig)
+    def glv_dynamics_lsoda_log(t, logx, dx, p):
+        x_ = carray(logx, (Ns,))
+        dx_ = carray(dx, (Ns,))
+        y = x_[:Ns]
+        ydot = (1 - np.dot(alpha,np.exp(y)))
+        ydot[y <= -30] = 0
+        ydot[y >= 20] = 0
+        dx_[:Ns] = ydot
+    return glv_dynamics_lsoda_log
+
 ###############
 ### SOLVERS ###
 ###############
+
+def solve_glv(y0,teval,g,alpha):
+    sol = integrate.solve_ivp(glv_fn,(teval[0],teval[-1]),y0,args=(g,alpha),t_eval=teval,method='LSODA',rtol=1e-8,atol=1e-8)
+    if(not sol.success):
+        print("Failed to solve time independent GLV")
+    return sol.y
 
 def main_simulate_fn(Nr,Ns,supplyVec,delta,species_params,maxTime):
     muMean,muSd,lMin,lMax = species_params
@@ -146,12 +175,6 @@ def multiple_runs(Nr,Ns,supplyVec,delta,species_params,numRuns,maxTime,seed):
     supplyVecArray = np.zeros((numRuns,Nr))
     for i in range(numRuns):
         muMatrices[i],dMatrices[i],lVectors[i],eoGrowths[i],eoInters[i],chemostatSolutions[i] = main_simulate_fn(Nr,Ns,supplyVec,delta,species_params,maxTime)
-        rescaledEOInters[i] = (eoInters[i]/eoGrowths[i][:,np.newaxis]) / np.diag(eoInters[i]/eoGrowths[i][:,np.newaxis])
+        rescaledEOInters[i] = rescale_interactions(eoInters[i],eoGrowths[i])
         supplyVecArray[i] = supplyVec
     return muMatrices,dMatrices,lVectors,supplyVecArray,eoGrowths,eoInters,rescaledEOInters,chemostatSolutions
-
-
-def rescale_interactions(interactionMatrix, growthVec):
-    bjj = np.diag(interactionMatrix)
-    return (interactionMatrix * growthVec[None, :]) / (bjj[None, :] * growthVec[:, None])
-

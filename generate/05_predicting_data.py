@@ -1,9 +1,14 @@
 import numpy as np
+import matplotlib.pyplot as plt
 import numba
 import scipy.integrate as integrate
+import scipy.optimize as optimize
 from numbalsoda import lsoda
 import pandas as pd
 import scipy.stats as stats
+import itertools
+import colormaps as cmaps
+import seaborn as sns
 
 from numba import njit,cfunc,carray
 from numbalsoda import lsoda_sig,lsoda
@@ -11,14 +16,8 @@ from numbalsoda import lsoda_sig,lsoda
 import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "scripts"))
 import cr_model
-import informed_glv
 import utils
 
-
-def compute_shannon(abundances_original):
-    abundances = abundances_original.copy()
-    abundances[abundances <= 0] = 1e-30
-    return -np.sum(abundances/np.sum(abundances) * np.log(abundances/np.sum(abundances)))
 
 @numba.njit
 def glv(t,y,inter):
@@ -26,31 +25,6 @@ def glv(t,y,inter):
     ydot[y<1e-20] = 0
     ydot[y>1e12] = 0
     return ydot
-
-def make_lsoda_func_glv_dynamics(alpha,Nsp):
-    @cfunc(lsoda_sig)
-    def glv_dynamics_lsoda_log(t, logx, dx, p):
-        x_ = carray(logx, (Nsp,))
-        dx_ = carray(dx, (Nsp,))
-        y = x_[:Nsp]
-        
-        ydot = (1 - np.dot(alpha,np.exp(y)))
-        ydot[y <= -30] = 0
-        ydot[y >= 20] = 0
-        dx_[:Nsp] = ydot
-    return glv_dynamics_lsoda_log
-
-def solve_glv_lsoda(initCond,interaction_matrix,maxTime):
-    Nsp = interaction_matrix.shape[0]
-    glv_dynamics_lsoda_log = make_lsoda_func_glv_dynamics(interaction_matrix,Nsp)
-    func = glv_dynamics_lsoda_log.address
-    
-    tspan = np.linspace(0, maxTime, 1000)
-    initCond = np.log(initCond)
-    
-    sol,success = lsoda(func, initCond, tspan)
-    
-    return np.exp(sol) 
 
 def compute_interactions(rVec,muMatrix,supplyVec,delta,Ns,Nr):
     def sigmaVec_fn(rVec,muMatrix,supplyVec,delta,Ns,Nr):
@@ -130,11 +104,6 @@ def generate_needed_matrices(rescaled_inter_matrix,needed_Ns):
     gaussian_interactions = generate_gaussian(gaussian_mean,gaussian_sd,Ns=Ns)
     return gaussian_interactions,lognormal_interactions
 
-def normal_to_lognormal(mean,sd):
-    mu = np.round(np.log(mean**2/np.sqrt(mean**2 + sd**2)),8)
-    sigma = np.round(np.sqrt(np.log(1 + sd**2/mean**2)),8)
-    return mu,sigma
-
 #####################
 ### DUCKWEED DATA ###
 #####################
@@ -148,7 +117,7 @@ mean_inters = np.mean(inters_chain,axis=0)
 sd_inters = np.std(inters_chain,axis=0)
 cov_sd = np.diag(sd_inters**2)
 inter_matrix = np.reshape(np.array(mean_inters),(7,7)).astype(float)
-rescaled_inter_matrix = inter_matrix / np.diag(inter_matrix)
+rescaled_inter_matrix = cr_model.rescale_interactions(inter_matrix, np.ones(inter_matrix.shape[0]))
 
 maxTime = 1000
 n_trials = 1000
@@ -170,11 +139,11 @@ for trialID in range(n_trials):
     lognormal_soln = integrate.solve_ivp(glv, (0,maxTime), init_cond, args=(lognormal_approx,), method="LSODA")
 
     if(gaussian_soln.y[:,-1] < 1e8).all():
-        gaussian_shannon = compute_shannon(gaussian_soln.y[:,-1])
+        gaussian_shannon = utils.compute_shannon(gaussian_soln.y[:,-1])
     else:
         gaussian_shannon = -1
     if(lognormal_soln.y[:,-1] < 1e8).all():
-        lognormal_shannon = compute_shannon(lognormal_soln.y[:,-1])
+        lognormal_shannon = utils.compute_shannon(lognormal_soln.y[:,-1])
     else:
         lognormal_shannon = -1
     gaussian_diversities_full[trialID] = gaussian_shannon
@@ -187,11 +156,11 @@ for trialID in range(n_trials):
     lognormal_soln = integrate.solve_ivp(glv, (0,maxTime), init_cond, args=(lognormal_approx,), method="LSODA")
 
     if(gaussian_soln.y[:,-1] < 1e8).all():
-        gaussian_shannon = compute_shannon(gaussian_soln.y[:,-1])
+        gaussian_shannon = utils.compute_shannon(gaussian_soln.y[:,-1])
     else:
         gaussian_shannon = -1
     if(lognormal_soln.y[:,-1] < 1e8).all():
-        lognormal_shannon = compute_shannon(lognormal_soln.y[:,-1])
+        lognormal_shannon = utils.compute_shannon(lognormal_soln.y[:,-1])
     else:
         lognormal_shannon = -1
     gaussian_diversities_doo[trialID] = gaussian_shannon
@@ -205,11 +174,11 @@ lognormal_diversities_doo = lognormal_diversities_doo[lognormal_diversities_doo 
 
 pop_diversities = np.zeros(drop_one_pops.shape[0])
 for i in range(drop_one_pops.shape[0]):
-    pop_diversities[i] = compute_shannon(drop_one_pops[i])
+    pop_diversities[i] = utils.compute_shannon(drop_one_pops[i])
 
 full_pop_shannon = np.zeros(full_pops.shape[0])
 for i in range(full_pops.shape[0]):
-    full_pop_shannon[i] = compute_shannon(full_pops[i])
+    full_pop_shannon[i] = utils.compute_shannon(full_pops[i])
 
 glv_diversities = [gaussian_diversities_doo,lognormal_diversities_doo]
 tvalues_full = []
@@ -279,7 +248,7 @@ cr_soln = integrate.solve_ivp(competitve_cr, (0,cr_maxTime), cr_init, args=(R_in
 cr_soln_pops = cr_soln.y[:Ns]
 
 eo_growth,eo_interaction = compute_interactions(cr_soln.y[Ns:,-1],R_inf,cr_supply,cr_delta,Ns,Nr)
-rescaled_interactions = np.abs((eo_interaction/eo_growth[:,None]) / np.diag(eo_interaction/eo_growth[:,None]))
+rescaled_interactions = np.abs(cr_model.rescale_interactions(eo_interaction, eo_growth))
 non_diag_interactions = rescaled_interactions[np.where(rescaled_interactions != 1)]
 non_zero_interactions = non_diag_interactions[non_diag_interactions != 0]
 sparsity = (1-non_zero_interactions.size/non_diag_interactions.size)
@@ -320,10 +289,10 @@ for trialID in range(n_trials):
     lognormal_soln = integrate.solve_ivp(glv, (0,maxTime), init_cond, args=(lognormal_approx,), method="LSODA")
     
     if((gaussian_soln.y[:,-1]<1e12).all()):
-        gaussian_shannon = compute_shannon(gaussian_soln.y[:,-1])
+        gaussian_shannon = utils.compute_shannon(gaussian_soln.y[:,-1])
     else:
         gaussian_shannon = -1
-    lognormal_shannon = compute_shannon(lognormal_soln.y[:,-1])
+    lognormal_shannon = utils.compute_shannon(lognormal_soln.y[:,-1])
 
     gaussian_diversities[trialID] = gaussian_shannon
     lognormal_diversities[trialID] = lognormal_shannon
@@ -336,9 +305,9 @@ np.save("../data/figures/fig4/gut/lognormal_diversities.npy",lognormal_diversiti
 
 pop_diversities = np.zeros(drop_one_out_expt.shape[0])
 for i in range(drop_one_out_expt.shape[0]):
-    pop_diversities[i] = compute_shannon(drop_one_out_expt[i])
+    pop_diversities[i] = utils.compute_shannon(drop_one_out_expt[i])
 
-full_pop_shannon = compute_shannon(full_comm_expt)
+full_pop_shannon = utils.compute_shannon(full_comm_expt)
 
 glv_diversities = [gaussian_diversities,lognormal_diversities]
 

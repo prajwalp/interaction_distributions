@@ -4,9 +4,6 @@ from numbalsoda import lsoda
 import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "scripts"))
 import cr_model
-import informed_glv
-import utils
-
 Ns = 100
 Nr = 100
 
@@ -64,7 +61,7 @@ for i in range(num_l_values):
         population_matrices[i,j,:] = final_tpoints[:Ns]
         growth_rates_matrix[i,j,:] = tdepGrowthEnd
         interaction_matrices[i,j,:,:] = tdepInterEnd
-        rescaled_interaction_matrices[i,j] = ((tdepInterEnd/tdepGrowthEnd[:,np.newaxis]) / np.diag(tdepInterEnd/tdepGrowthEnd[:,np.newaxis]))
+        rescaled_interaction_matrices[i,j] = cr_model.rescale_interactions(tdepInterEnd, tdepGrowthEnd)
         surv_pop = np.where(final_tpoints[:Ns] > 0.01)[0]
     print(i)
 

@@ -33,6 +33,14 @@ def generate_axis(minVal,maxVal,nBins,logFlag):
     else:
         return np.linspace(minVal,maxVal,nBins)
 
+def compute_shannon(populations):
+    p = populations.copy()
+    if (p < 1e-30).all():
+        return np.nan
+    p[p <= 0] = 1e-30
+    rel = p/p.sum()
+    return -np.sum(rel*np.log(rel))
+
 ##########################
 ###  COMPUTE FUNCTIONS ###
 ##########################

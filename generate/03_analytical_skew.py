@@ -3,11 +3,9 @@ import numpy as np
 from numba import njit,cfunc,carray
 from numbalsoda import lsoda_sig,lsoda
 
-
 import sys, os
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "scripts"))
 import cr_model
-import informed_glv
 import utils
 
 
@@ -23,11 +21,6 @@ def compute_theory_matrix(muMatrix):
     var_interaction = Nr * (sm_mu**2 - mean_mu**4)
     tc_interaction = Nr*(tm_mu**2 - 3*mean_mu**2*sm_mu**2 + 2*mean_mu**6)
     return mean_interaction, var_interaction, tc_interaction
-
-def normal_to_lognormal(mean,sd):
-    mu = np.round(np.log(mean**2/np.sqrt(mean**2 + sd**2)),8)
-    sigma = np.round(np.sqrt(np.log(1 + sd**2/mean**2)),8)
-    return mu,sigma
 
 def compute_cumulants(matrix):
     mean = np.mean(matrix)
@@ -79,35 +72,24 @@ def compute_crossfeeding_skew(muMatrix,dTensor,lVector):
     return mean_interaction, var_interaction, tc_interaction
     
 
-def macarthur_competitive(rVec,muMatrix,supplyVec,delta,Ns,Nr):
+def make_lsoda_competitive(muMatrix,supplyVec,delta,Ns,Nr):
+    @cfunc(lsoda_sig)
+    def comp_dynamics_lsoda(t, x, dx, p):
+        x_ = carray(x, (Ns+Nr,))
+        dx_ = carray(dx, (Ns+Nr,))
+        populations = x_[:Ns]
+        resources = x_[Ns:]
 
-    @njit
-    def sigmaVec_fn(rVec,muMatrix,supplyVec,delta,Ns,Nr):
-        sigmaVec = delta*(supplyVec - rVec)
-        return sigmaVec
+        uptakeMatrix = (muMatrix.T * populations).T * resources/(1+resources)
+        resourceUsage = np.sum(uptakeMatrix,axis=0)          
 
-    @njit
-    def fMatrix_fn(rVec,muMatrix,supplyVec,delta,Ns,Nr):
-        fMatrix = - (muMatrix*rVec/(1+rVec)).T 
-        return fMatrix
 
-    @njit
-    def sMatrix_fn(rVec,muMatrix,supplyVec,delta,Ns,Nr):
-        sMatrix = muMatrix/(1+rVec)**2
-        return sMatrix
-    
-    @njit
-    def eo_interaction_params(rVec,muMatrix,supplyVec,delta,Ns,Nr):
+        dx_[:Ns] = (np.sum(uptakeMatrix,axis=1) - delta*populations )   
+        dx_[Ns:] = delta*(supplyVec- resources) - resourceUsage
 
-        sigmaVec = sigmaVec_fn(rVec,muMatrix,supplyVec,delta,Ns,Nr)
-        fMatrix = fMatrix_fn(rVec,muMatrix,supplyVec,delta,Ns,Nr)
-        sMatrix = sMatrix_fn(rVec,muMatrix,supplyVec,delta,Ns,Nr)
-
-        growthVec = np.dot(sMatrix,sigmaVec) 
-        interactionMatrix = np.dot(sMatrix,fMatrix)
-        return growthVec,interactionMatrix
-
-    return eo_interaction_params(rVec,muMatrix,supplyVec,delta,Ns,Nr)
+        dx_[:Ns][populations < 1e-20] = 0
+        dx_[Ns:][resources < 1e-40] = 0
+    return comp_dynamics_lsoda
 
 
 Ns = 100
@@ -121,7 +103,7 @@ iprs = np.zeros((len(theory_sd_mu), nreps))
 for i, sd in enumerate(theory_sd_mu):
     for reps in range(nreps):
         resc_mean,resc_sd = mean_mu/Nr, sd/Nr
-        lg_mean, lg_sd = np.round(normal_to_lognormal(mean_mu, sd),3)
+        lg_mean, lg_sd = np.round(utils.normal_to_lognormal(mean_mu, sd),3)
         muMatrix = np.random.lognormal(lg_mean,lg_sd, size=(Ns,Nr))/Nr
         interaction_cumulants[i,reps, :] = compute_theory_matrix(muMatrix)
         
@@ -141,8 +123,8 @@ simulation_iprs = np.zeros((len(sd_mu), simulation_reps))
 for i, sd in enumerate(sd_mu):
     
     for reps in range(simulation_reps):
-        muMatrix = np.random.lognormal(*normal_to_lognormal(mean_mu, sd), size=(Ns,Nr))/Nr
-        comp_dynamics_lsoda = cr_model.make_lsoda_func_dtx_dynamics_with_aff(muMatrix,np.zeros((Nr,Nr)),np.zeros(Ns),supplyVec,delta,Ns,Nr)
+        muMatrix = np.random.lognormal(*utils.normal_to_lognormal(mean_mu, sd), size=(Ns,Nr))/Nr
+        comp_dynamics_lsoda = make_lsoda_competitive(muMatrix,supplyVec,delta,Ns,Nr)
         funcptr = comp_dynamics_lsoda.address
         usol, success = lsoda(funcptr, initialConditions.flatten(), t,atol=1e-10,rtol=1e-9)
         fail_count = 0
@@ -156,7 +138,7 @@ for i, sd in enumerate(sd_mu):
         rVec = usol[-1,:][Ns:]
 
         tdepGrowthEnd,tdepInterEnd = cr_model.with_affinities(rVec,muMatrix,np.zeros((Nr,Nr)),np.zeros(Ns),supplyVec,delta,Ns,Nr)
-        rescaled_inters = (tdepInterEnd / tdepGrowthEnd [:,None]) / np.diag(tdepInterEnd / tdepGrowthEnd [:,None])
+        rescaled_inters = cr_model.rescale_interactions(tdepInterEnd, tdepGrowthEnd)
         non_diag_inters = rescaled_inters[rescaled_inters != 1]
         simulation_cumulants[i,reps,:] = compute_cumulants(non_diag_inters)
         full_interaction_cumulants[i,reps,:] = compute_cumulants(tdepInterEnd.flatten())
@@ -187,7 +169,7 @@ for reps in range(nreps):
     dTensor = np.random.uniform(0,1/(Nr-1), size=(Nr,Nr))
     dTensor[np.eye(dTensor.shape[0],dtype=bool)] = 0
 
-    muMatrix = np.random.lognormal(*normal_to_lognormal(mean_mu, sd_mu), size=(Ns,Nr))/Nr
+    muMatrix = np.random.lognormal(*utils.normal_to_lognormal(mean_mu, sd_mu), size=(Ns,Nr))/Nr
     for i, lVal in enumerate(lValues):                               
             interaction_cumulants_crossfeeding[i,reps, :] += compute_crossfeeding_skew(muMatrix,dTensor,lVal)
 
@@ -205,7 +187,7 @@ full_interaction_cumulants = np.zeros((len(lMinVals), simulation_reps,3))
 non_diag_cumulants = np.zeros((len(lMinVals), simulation_reps,3))
 simulation_iprs = np.zeros((len(lMinVals), simulation_reps))
 for reps in range(simulation_reps):
-    muMatrix = np.random.lognormal(*normal_to_lognormal(mean_mu, sd_mu), size=(Ns,Nr))/Nr
+    muMatrix = np.random.lognormal(*utils.normal_to_lognormal(mean_mu, sd_mu), size=(Ns,Nr))/Nr
     dTensor = np.random.uniform(0,1/(Nr-1), size=(Nr,Nr))
     dTensor[np.eye(dTensor.shape[0],dtype=bool)] = 0
     for lID in range(len(lMinVals)):        
@@ -225,7 +207,7 @@ for reps in range(simulation_reps):
         rVec = usol[-1,:][Ns:]
 
         tdepGrowthEnd,tdepInterEnd = cr_model.with_affinities(rVec,muMatrix,dTensor,lVector,supplyVec,delta,Ns,Nr)
-        rescaled_inters = (tdepInterEnd / tdepGrowthEnd [:,None]) / np.diag(tdepInterEnd / tdepGrowthEnd [:,None])
+        rescaled_inters = cr_model.rescale_interactions(tdepInterEnd, tdepGrowthEnd)
         non_diag_inters = rescaled_inters[rescaled_inters != 1]
         simulation_cumulants[lID,reps,:] = compute_cumulants(non_diag_inters)
         full_interaction_cumulants[lID,reps,:] = compute_cumulants(tdepInterEnd.flatten())

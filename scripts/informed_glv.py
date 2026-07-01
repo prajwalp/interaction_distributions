@@ -1,9 +1,7 @@
 import numpy as np
-import sys 
+from numbalsoda import lsoda
+import cr_model
 import utils
-
-from numba import njit,cfunc,carray
-from numbalsoda import lsoda_sig,lsoda
 
 def compute_correlated(rescaled_inter,Ns):
     frac_pp = []
@@ -126,28 +124,15 @@ def generate_gaussian_matrix(gauss_fit,Ns):
 
     return gaussian_approx
 
-
-def make_lsoda_func_glv_dynamics(alpha, Ns):
-    @cfunc(lsoda_sig)
-    def glv_dynamics_lsoda_log(t, logx, dx, p):
-        x_ = carray(logx, (Ns,)); dx_ = carray(dx, (Ns,))
-        y = x_[:Ns]
-        ydot = 1 - np.dot(alpha, np.exp(y))
-        ydot[y <= -30] = 0
-        ydot[y >= 20] = 0
-        dx_[:Ns] = ydot
-    return glv_dynamics_lsoda_log
-
 def simulate_stability(interaction,maxTime,Ns):
     init_cond = np.full(Ns,0.1)
     tGLV = np.linspace(0, maxTime, 1000)
-    glv_dynamics_lsoda = make_lsoda_func_glv_dynamics(interaction,Ns)
+    glv_dynamics_lsoda = cr_model.make_lsoda_func_glv_dynamics(interaction,Ns)
     funcptr_glv = glv_dynamics_lsoda.address
-    glv_soln,success = lsoda(funcptr_glv, np.log(init_cond), tGLV)            
-
+    glv_soln,success = lsoda(funcptr_glv, np.log(init_cond), tGLV)
     if((glv_soln[-1,:]<20).all()):
         glv_pop = np.exp(glv_soln[-1,:])
-        return_vals =  1,np.where(glv_pop>1e-3)[0].size,utils.compute_shannon(glv_pop)
+        return_vals = 1,np.where(glv_pop>1e-3)[0].size,utils.compute_shannon(glv_pop)
         del glv_soln
         return return_vals
     else:

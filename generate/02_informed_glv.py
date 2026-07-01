@@ -1,15 +1,14 @@
 import numpy as np
 
 from multiprocessing import Pool, cpu_count
-from numbalsoda import lsoda_sig,lsoda
-import time
 
-import sys, os
+import time, sys, os
+from numbalsoda import lsoda
+
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "scripts"))
 import cr_model
 import informed_glv
 import utils
-  
 
 def run_leakage(params):
     Ns,Nr,supplyVec,delta,muMean,muSd,lMin,lMax,chemostat_trials,n_glv_trials,randomseed  = params
@@ -39,13 +38,13 @@ def run_leakage(params):
         surv_num = np.where(final_tpoints[:Ns] > 1e-3)[0]
 
         tdepGrowthEnd,tdepInterEnd = cr_model.with_affinities(rVec,muMatrix,dTensor,lVector,supplyVec,delta,Ns,Nr)
-        rescaled_inter = cr_model.rescale_interactions(tdepInterEnd, tdepGrowthEnd)
+        rescaled_inter = cr_model.rescale_interactions(tdepInterEnd,tdepGrowthEnd)
 
         gauss_fit_vals[chemID] = np.mean(rescaled_inter[rescaled_inter != 1]),np.std(rescaled_inter[rescaled_inter != 1])
         lg_fit_vals[chemID] = informed_glv.compute_lg_fit_params(rescaled_inter,Ns)
         corr_fit_vals[chemID] = informed_glv.compute_correlation_fit_params(rescaled_inter,Ns)
         
-        chemostat_results[chemID]  = surv_num.size,informed_glv.compute_shannon(final_tpoints[:Ns])
+        chemostat_results[chemID]  = surv_num.size,utils.compute_shannon(final_tpoints[:Ns])
         del usol
 
     mean_corr_fit = np.nanmean(corr_fit_vals,axis=0)
@@ -114,7 +113,8 @@ if __name__ == '__main__':
 
         print(f"Total time: {time.time()-TSTARTTOTAL}\n")
 
-        saveFolder = "../../../Data/microbial_interactions/theory/simplified/predictability/lowSupply/gamma1.75/"
+        saveFolder = "data/predictability/"
+        os.makedirs(saveFolder, exist_ok=True)
         utils.save_compressed_pickle(saveFolder+"glv_predictability_data_N-"+str(Ns),functionResults)
         utils.save_compressed_pickle(saveFolder+"glv_predictability_params_N-"+str(Ns),species_params)
 
